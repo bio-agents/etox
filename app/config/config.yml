@@ -1,0 +1,485 @@
+imports:
+    - { resource: parameters.yml }
+    - { resource: security.yml }
+    - { resource: sentry.yml }
+
+framework:
+    #esi:             ~
+    translator:      { fallback: %locale% }
+    secret:          %secret%
+    router:
+        resource: "%kernel.root_dir%/config/routing.yml"
+        strict_requirements: ~
+    form:            ~
+    csrf_protection: ~
+    validation:      { enable_annotations: true }
+    templating:
+        engines: ['twig']
+        #assets_version: SomeVersionScheme
+    default_locale:  "%locale%"
+    trusted_proxies: ~
+    session:         ~
+    fragments:       ~
+
+# Twig Configuration
+twig:
+    debug:            %kernel.debug%
+    strict_variables: %kernel.debug%
+    globals:
+        default_field:  "hepatotoxicity"
+        default_searchInto:  "document"
+        default_whatToSearch:  "name"
+        default_whatToSearch_keyword:  "any"
+        default_whatToSearch_gene:  "any"
+        default_kind:  "pubmed"
+        default_entityType: "CompoundDict"
+        default_entityName:  "Troglitazone"
+        default_orderby:  "hepval"
+        default_compound:  "Troglitazone"
+        default_entityId: "CHEBI:9753"
+        default_keywordSearch:  "bile salt"
+        default_cytochromeName: "CYP1A1"
+        default_cytochromeId: "A1A5B1"
+        default_markerName:  "AST"
+        default_markerId:   "CID 5280352"
+        default_source:   "all"
+        default_toxicEndpoints: "Troglitazone"
+        default_endpoint: "hepatotoxicity"
+        default_gene: "MDR3"
+        default_geneSearch: "MDR3"
+        mouseover_source: "Document source used (PubMed abstracts/sentences, full text articles, NDAs or EPARs)"
+        mouseover_svm: "Sort by SVM score. Binary linear kernel SVM classifier score result (SVMLight).Features: word unigram, stop word filter, balanced training set. The higher the more related to the topic. If the output of the scoring function is positive then the text was classified as relevant for adverse hepatobiliary events, while if it has a negative score it was classified as non-relevant. See: http://svmlight.joachims.org"
+        mouseover_conf: "Sort by SVM confidence score. Binary linear kernel SVM classifier confidence scores (scikit-learn).Features: word 1-4grams, stop word filter, tf-idf weights, balanced training set. The higher the more related to the topic. If the output of the scoring function is positive then the text was classified as relevant for adverse hepatobiliary events, while if it has a negative score it was classified as non-relevant. (See: http://scikit-learn.org and decision_function)"
+        mouseover_pattern: "Sort by pattern score. Number of adverse hepatobiliary event text patterns detected."
+        mouseover_term: "Sort by term score. Number of adverse hepatobiliary event terms/phrases detected."
+        mouseover_rule: "Sort by rule score.  Scores of 0.01 correspond to sentences that only mention a term or phrase related to the hepatobiliary system. Scores > 0.01 correspond to sentences that also contain adverse, toxic or disease events. The rule score is a heuristic score that takes into account: (1) the number of co-occurrences between hepatobiliary terms and adverse effect terms in a sentences, (2) their respective relative order within the sentence and (3) their relative distance measured by the number of word tokens between them."
+        mouseover_toxicology: ""
+        mouseover_biomarker: ""
+        mouseover_nephro: "Sort by nephrotoxicity score. Binary linear kernel SVM classifier score result (SVMLight).Features: word unigram, stop word filter, balanced training set. The higher the more related to the topic. If the output of the scoring function is positive then the text was classified as relevant for adverse nephrologic events, while if it has a negative score it was classified as non-relevant. See: http://svmlight.joachims.org"
+        mouseover_nephro_cytochrome: "Nephrotoxicity score. Binary linear kernel SVM classifier score result (SVMLight).Features: word unigram, stop word filter, balanced training set. The higher the more related to the topic. If the output of the scoring function is positive then the text was classified as relevant for adverse nephrologic events, while if it has a negative score it was classified as non-relevant. See: http://svmlight.joachims.org"
+        mouseover_cardio: "Sort by cardiotoxicity score. Binary linear kernel SVM classifier score result (SVMLight).Features: word unigram, stop word filter, balanced training set. The higher the more related to the topic. If the output of the scoring function is positive then the text was classified as relevant for adverse cardiological events, while if it has a negative score it was classified as non-relevant. See: http://svmlight.joachims.org"
+        mouseover_cardio_cytochrome: "Cardiotoxicity score. Binary linear kernel SVM classifier score result (SVMLight).Features: word unigram, stop word filter, balanced training set. The higher the more related to the topic. If the output of the scoring function is positive then the text was classified as relevant for adverse cardiological events, while if it has a negative score it was classified as non-relevant. See: http://svmlight.joachims.org"
+        mouseover_thyro: "Sort by thyrotoxicity score. Binary linear kernel SVM classifier score result (SVMLight).Features: word unigram, stop word filter, balanced training set. The higher the more related to the topic. If the output of the scoring function is positive then the text was classified as relevant for adverse thyroid events, while if it has a negative score it was classified as non-relevant. See: http://svmlight.joachims.org"
+        mouseover_phospho: "Sort by phospholipidosis score. Binary linear kernel SVM classifier score result (SVMLight).Features: word unigram, stop word filter, balanced training set. The higher the more related to the topic. If the output of the scoring function is positive then the text was classified as relevant for adverse phospholipidic events, while if it has a negative score it was classified as non-relevant. See: http://svmlight.joachims.org"
+        mouseover_toxic_endpoints: "Direct access to other toxic endpoints for this entity: Nephrotoxicity, Cardiotoxicity, Thyrotoxicity and Phospholipidosis"
+        mouseover_curation: "Manually validated item."
+        mouseover_compound_relation_compound: "Chemical compound or drug"
+        mouseover_compound_relation_relation: "Association between chemical compounds/drugs and adverse hepatobiliary events."
+        mouseover_compound_relation_term: "Adverse hepatobiliary term or phrase. These correspond to terms extracted from controlled vocabularies (COSTART, HumanPhenotype, MeDRA, eTOX-IMIM, etc.) as well as derived directly from the literature using noun-phrase extraction and a rule based system for term prioritization."
+        mouseover_compound_relation_score:  "chemical compound-adverse hepatobiliary term association score. In case the relation was detected by a pattern based method (high precision) a score of 1 is provided, otherwise the SVM confidence score is provided, corresponding to the scikit-learn.org decision_function result of a binary linear kernel SVM trained using as positive training data sentences detected by the pattern based method."
+        mouseover_compound_relation_qualifier: "The relation qualifier refers to affirmed or negated relationships between the entities. AA: (chemical affirmed, term affirmed); AN:  (chemical affirmed, term negated); NA: (chemical negated, term affirmed); NN:  (chemical negated, term negated)"
+        mouseover_cytochrome_relation_compound: "Chemical compound or drug"
+        mouseover_cytochrome_relation_relation: "Association between chemical compounds/drugs and Cytochromes P450 (CYPs)."
+        mouseover_cytochrome_relation_cytochrome: "Cytochromes P450 (CYPs) (e.g. CYP3A4, CYP2C8, CYP2B6). It covers CYPs from humans and the 37 main mammalian animal models used in toxicology studies."
+        mouseover_cytochrome_relation_induction: "Sort by induction/activation/enhancement relationship score. 3: relationship detected by both a pattern based approach and a SVM sentences classifier; 2: relationship detected only by the pattern based approach; 1: relationship detected only by the SVM sentence classifier approach; 0: not detected by neither of both."
+        mouseover_cytochrome_relation_inhibition: "Sort by inhibition/repression/inactivation relationship score. 3: relationship detected by both a pattern based approach and a SVM sentences classifier; 2: relationship detected only by the pattern based approach; 1: relationship detected only by the SVM sentence classifier approach; 0: not detected by neither of both."
+        mouseover_cytochrome_relation_metabolism: "Sort by metabolism/substrate/product relationship score. 3: relationship detected by both a pattern based approach and a SVM sentences classifier; 2: relationship detected only by the pattern based approach; 1: relationship detected only by the SVM sentence classifier approach; 0: not detected by neither of both."
+        mouseover_cytochrome_relation_qualifier: "The relation qualifier refers to affirmed or negated relationships.AA: (chemical affirmed, CYPs affirmed); AN:  (chemical affirmed, CYPs negated); NA: (chemical negated, CYPs affirmed); NN:  (chemical negated, CYPs negated)"
+        mouseover_marker_relation_compound: "Chemical compound or drug"
+        mouseover_marker_relation_relation: "Association between chemical compounds/drugs and liver biochemical markers (e.g. ALT, AST, SDH, GGT)"
+        mouseover_marker_relation_marker: "Correspond to one of 17 enzymes and chemical compounds assayed as biochemical markers of adverse liver reactions (e.g. ALT, AST, SDH, GGT). Also a unspecific term was included (liver tests)."
+        mouseover_marker_relation_score: "Chemical-marker relation score. If the relation was detected by a pattern based approach the score is 1, otherwise a SVM relationship sentence classifier score is provided."
+        mouseover_marker_relation_qualifier: "The relation qualifier refers to affirmed or negated relationships. AA: (chemical affirmed, marker affirmed); AN:  (chemical affirmed, marker negated); NA: (chemical negated, marker affirmed); NN:  (chemical negated, marker negated)"
+        mouseover_relation_curation: "Manually validated item."
+        total_number_of_cytochromes: 793956
+
+
+# Assetic Configuration
+assetic:
+    debug:          %kernel.debug%
+    use_controller: false
+    bundles:        [ ]
+    #java: /usr/bin/java
+    #node: %node_path%
+    node: /usr/local/bin/node
+    filters:
+        cssrewrite: ~
+        uglifyjs2:
+            bin: %kernel.root_dir%/Resources/node_modules/uglify-js/bin/uglifyjs
+        uglifycss:
+            bin: %kernel.root_dir%/Resources/node_modules/uglifycss/uglifycss
+
+# Doctrine Configuration
+doctrine:
+    dbal:
+        driver:   "%database_driver%"
+        host:     "%database_host%"
+        port:     %database_port%
+        dbname:   "%database_name%"
+        user:     "%database_user%"
+        password: "%database_password%"
+        charset:  UTF8
+        mapping_types:
+            enum: string
+        # if using pdo_sqlite as your database driver, add the path in parameters.yml
+        # e.g. database_path: %kernel.root_dir%/data/data.db3
+        # path:     %database_path%
+
+    orm:
+        auto_generate_proxy_classes: %kernel.debug%
+        auto_mapping: true
+
+# Swiftmailer Configuration
+swiftmailer:
+    transport: gmail
+    #host:      %mailer_host%
+    username:  %mailer_user%
+    password:  %mailer_password%
+    spool:     { type: memory }
+
+fos_user:
+    db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
+    firewall_name: main
+    user_class: EtoxMicrome\UserBundle\Entity\User
+    registration:
+        confirmation:
+            enabled:    true
+            from_email:
+                address:    acanada@cnio.es
+                sender_name:    Limtox Registration
+    resetting:
+        email:
+            from_email:
+                address:    acanada@cnio.es
+                sender_name:    Limtox Resetting
+    from_email:
+        address:    noreply@limtox.com
+        sender_name:    Limtox
+
+
+#Elasticsearch configuration
+fos_elastica:
+    clients:
+        default: { host: limtox.cnio.es, port: 9204 }
+    indexes:
+        etoxindex3:
+            client: default
+            finder: ~
+            types:
+                abstracts:
+                    mappings:
+                        pmid: { type: integer }
+                        title: {type: string, boost: 6, index_analyzer : my_analyzer, search_analyzer : my_analyzer}
+                        text: {type: string, index_analyzer : my_analyzer, search_analyzer : my_analyzer}
+                        hepval: { type: float }
+                        patternCount: { type: float }
+                        ruleScore: { type: float }
+                        hepTermNormScore: { type: float }
+                        hepTermVarScore: { type: float }
+                        svmConfidence: { type: float }
+                        toxicology: { type: float }
+                        biomarker: { type: float }
+                    persistence:
+                        driver: orm
+                        model: EtoxMicrome\DocumentBundle\Entity\Abstracts
+                        provider: ~
+                        finder: ~
+                        listener:
+                            insert: true
+                            update: true
+                            delete: true
+            settings:
+                index:
+                  analysis:
+                       analyzer:
+                            my_analyzer :
+                                type     :    custom
+                                tokenizer:    standard
+                                filter   :    [ "standard", "lowercase", "stop", "kstem" ]
+                            custom_search_analyzer :
+                                type     :    custom
+                                tokenizer:    standard
+                                filter   :    [ "standard", "lowercase", "stop", "kstem" ]
+                            custom_search_analyzer :
+                                type     :    custom
+                                tokenizer:    standard
+                                filter   :    [ "standard", "lowercase", "stop", "kstem" ]
+        etoxindex2:
+            client: default
+            finder: ~
+            types:
+                abstracts:
+                    mappings:
+                        pmid: { type: integer }
+                        title: {type: string, boost: 6, index_analyzer : custom_analyzer, search_analyzer : custom_search_analyzer}
+                        text: {type: string, index_analyzer : custom_analyzer, search_analyzer : custom_search_analyzer}
+                        hepval: { type: float }
+                        patternCount: { type: float }
+                        ruleScore: { type: float }
+                        hepTermNormScore: { type: float }
+                        hepTermVarScore: { type: float }
+                        svmConfidence: { type: float }
+                        toxicology: { type: float }
+                        biomarker: { type: float }
+                    persistence:
+                        driver: orm
+                        model: EtoxMicrome\DocumentBundle\Entity\Abstracts
+                        provider: ~
+                        finder: ~
+                        listener:
+                            insert: true
+                            update: true
+                            delete: true
+                documents:
+                    mappings:
+                        kind: { type: integer }
+                        uid: { type: string }
+                        sentenceId: { type: string }
+                        text: {type: string, boost: 6, index_analyzer : custom_analyzer, search_analyzer : custom_search_analyzer}
+                        hepval: { type: float }
+                        cardval: { type: float }
+                        nephval: { type: float }
+                        phosval: { type: float }
+                        nephroval: { type: float }
+                        cardioval: { type: float }
+                        patternCount: { type: float }
+                        ruleScore: { type: float }
+                        hepTermNormScore: { type: float }
+                        hepTermVarScore: { type: float }
+                        svmConfidence: { type: float }
+                    persistence:
+                        driver: orm
+                        model: EtoxMicrome\DocumentBundle\Entity\Document
+                        provider: ~
+                        finder: ~
+                        listener:
+                            insert: true
+                            update: true
+                            delete: true
+                        elastica_to_model_transformer:
+                            ignore_missing: true
+                entity2document:
+                    mappings:
+                        document: { type: integer }
+                        kind: { type: string }
+                        name: {type: string, boost: 6, index_analyzer : custom_analyzer, search_analyzer : custom_search_analyzer}
+                        qualifier: {type: string, boost: 3, index_analyzer : custom_analyzer, search_analyzer : custom_search_analyzer}
+                        tagMethod: { type: string }
+                        curation: { type: integer }
+                        hepval: { type: float }
+                        cardval: { type: float }
+                        nephval: { type: float }
+                        phosval: { type: float }
+                        patternCount: { type: float }
+                        ruleScore: { type: float }
+                        hepTermNormScore: { type: float }
+                        hepTermVarScore: { type: float }
+                        svmConfidence: { type: float }
+                    persistence:
+                        driver: orm
+                        model: EtoxMicrome\Entity2DocumentBundle\Entity\Entity2Document
+                        provider: ~
+                        finder: ~
+                        listener:
+                            insert: true
+                            update: true
+                            delete: true
+                        elastica_to_model_transformer:
+                            ignore_missing: true
+                abstractswithcompounds:
+                    mappings:
+                        pmid: { type: integer }
+                        title: {type: string, boost: 6, index_analyzer : custom_analyzer, search_analyzer : custom_search_analyzer}
+                        text: {type: string, index_analyzer : custom_analyzer, search_analyzer : custom_search_analyzer}
+                        hepval: { type: float }
+                        patternCount: { type: float }
+                        ruleScore: { type: float }
+                        hepTermNormScore: { type: float }
+                        hepTermVarScore: { type: float }
+                        svmConfidence: { type: float }
+                        toxicology: { type: float }
+                        biomarker: { type: float }
+                    persistence:
+                        driver: orm
+                        model: EtoxMicrome\DocumentBundle\Entity\AbstractWithCompound
+                        provider: ~
+                        finder: ~
+                        listener:
+                            insert: true
+                            update: true
+                            delete: true
+                        elastica_to_model_transformer:
+                            ignore_missing: true
+                documentswithcompounds:
+                    mappings:
+                        kind: { type: integer }
+                        uid: { type: string }
+                        sentenceId: { type: string }
+                        text: {type: string, boost: 6, index_analyzer : custom_analyzer, search_analyzer : custom_search_analyzer}
+                        hepval: { type: float }
+                        cardval: { type: float }
+                        nephval: { type: float }
+                        phosval: { type: float }
+                        patternCount: { type: float }
+                        ruleScore: { type: float }
+                        hepTermNormScore: { type: float }
+                        hepTermVarScore: { type: float }
+                        svmConfidence: { type: float }
+                    persistence:
+                        driver: orm
+                        model: EtoxMicrome\DocumentBundle\Entity\DocumentWithCompound
+                        provider: ~
+                        finder: ~
+                        listener:
+                            insert: true
+                            update: true
+                            delete: true
+                        elastica_to_model_transformer:
+                            ignore_missing: true
+                documentswithcytochromes:
+                    mappings:
+                        kind: { type: integer }
+                        uid: { type: string }
+                        sentenceId: { type: string }
+                        text: {type: string, boost: 6, index_analyzer : custom_analyzer, search_analyzer : custom_search_analyzer}
+                        hepval: { type: float }
+                        cardval: { type: float }
+                        nephval: { type: float }
+                        phosval: { type: float }
+                        patternCount: { type: float }
+                        ruleScore: { type: float }
+                        hepTermNormScore: { type: float }
+                        hepTermVarScore: { type: float }
+                        svmConfidence: { type: float }
+                    persistence:
+                        driver: orm
+                        model: EtoxMicrome\DocumentBundle\Entity\DocumentWithCytochrome
+                        provider: ~
+                        finder: ~
+                        listener:
+                            insert: true
+                            update: true
+                            delete: true
+                        elastica_to_model_transformer:
+                            ignore_missing: true
+                documentswithmarkers:
+                    mappings:
+                        kind: { type: string }
+                        uid: { type: string }
+                        sentenceId: { type: string }
+                        text: {type: string, boost: 6, index_analyzer : custom_analyzer, search_analyzer : custom_search_analyzer}
+                        hepval: { type: float }
+                        cardval: { type: float }
+                        nephval: { type: float }
+                        phosval: { type: float }
+                        patternCount: { type: float }
+                        ruleScore: { type: float }
+                        hepTermNormScore: { type: float }
+                        hepTermVarScore: { type: float }
+                        svmConfidence: { type: float }
+                    persistence:
+                        driver: orm
+                        model: EtoxMicrome\DocumentBundle\Entity\DocumentWithMarker
+                        provider: ~
+                        finder: ~
+                        listener:
+                            insert: true
+                            update: true
+                            delete: true
+                        elastica_to_model_transformer:
+                            ignore_missing: true
+            settings:
+                index:
+                  analysis:
+                       analyzer:
+                            custom_analyzer :
+                                type     :    custom
+                                tokenizer:    nGram
+                                filter   :    [stopwords, asciifolding ,lowercase, snowball, worddelimiter]
+                            custom_search_analyzer :
+                                type     :    custom
+                                tokenizer:    standard
+                                filter   :    [stopwords, asciifolding ,lowercase, snowball, worddelimiter]
+                            tokenizer:
+                                nGram:
+                                    type:     nGram
+                                    min_gram: 2
+                                    max_gram: 20
+                            filter:
+                                snowball:
+                                    type:     snowball
+                                    language: English
+                                stopwords:
+                                    type:      stop
+                                    stopwords: [_english_]
+                                    ignore_case : true
+                                worddelimiter :
+                                    type:      word_delimiter
+
+
+
+
+# Parametros globales del contenedor de dependencias
+parameters:
+    etoxMicrome.rdbase: "/opt/rdkit/RDKit_2014_03_1/"
+    etoxMicrome.pythonpath: "/opt/rdkit/3.1/lib/python2.7/site-packages/"
+    etoxMicrome.dyld_library_path: "/opt/rdkit/3.1/lib"
+    etoxMicrome.ld_library_path: "/opt/rdkit/3.1/lib"
+    etoxMicrome.default_field:  "hepatotoxicity"
+    etoxMicrome.default_searchInto:  "document"
+    etoxMicrome.default_kind:  "pubmed"
+    etoxMicrome.default_whatToSearch:  "name"
+    etoxMicrome.default_whatToSearch_keyword: "any"
+    etoxMicrome.default_whatToSearch_gene: "any"
+    etoxMicrome.default_entityType: "CompoundDict"
+    etoxMicrome.default_entityName:  "Troglitazone"
+    etoxMicrome.default_keywordSearch:  "bile salt"
+    etoxMicrome.default_cytochromeName: "CYP1A1"
+    etoxMicrome.default_markerName:  "AST"
+    etoxMicrome.default_source:  "all"
+    etoxMicrome.default_compound:  "Troglitazone"
+    etoxMicrome.default_orderby:  "hepval"
+    etoxMicrome.default_toxicEndpoints: "Troglitazone"
+    etoxMicrome.default_endpoint: "hepatotoxicity"
+    etoxMicrome.total_documents_elasticsearch_retrieval: 10000
+#You can see that, in a distributed system, the cost of sorting results grows exponentially the deeper we page. There is a good reason that web search engines don’t return more than 1,000 results for any query.
+    etoxMicrome.evidences_per_page: 10
+    etoxMicrome.cytochromes_per_page: 100
+    etoxMicrome.summaries_per_page: 50
+    etoxMicrome.number_of_pages: 15
+
+#Configuration to activate twig extension utilidades
+services:
+    EtoxMicrome.twig.extension.utility:
+        class: EtoxMicrome\DocumentBundle\Twig\Extension\UtilityExtension
+        arguments:
+            doctrine: "@doctrine"
+            router: "@router"
+        tags:
+            - { name: twig.extension }
+    utility:
+        class: EtoxMicrome\Entity2DocumentBundle\Utility
+        arguments: [ 10 ]
+
+raul_fraile_ladybug:
+    theme: modern # select the theme: base, modern or custom themes
+
+knp_paginator:
+    page_range: 5                      # default page range used in pagination control
+    default_options:
+        page_name: page                # page query parameter name
+        sort_field_name: sort          # sort field query parameter name
+        sort_direction_name: direction # sort direction query parameter name
+        distinct: true                 # ensure distinct results, useful when ORM queries are using GROUP BY statements
+    template:
+        pagination: KnpPaginatorBundle:Pagination:sliding.html.twig     # sliding pagination controls template
+        sortable: KnpPaginatorBundle:Pagination:sortable_link.html.twig # sort link template
+
+#monolog:
+#    use_microseconds: false
+#    handlers:
+#        info:
+#            type: stream
+#            path: /var/log/symfony/symfony.log
+#            level: error
+#        main:
+#            type: fingers_crossed
+#            action_level: warning
+#            handler: file
+#        file:
+#            type: stream
+#            level: debug
+#        syslog:
+#            type: syslog
+#            level: error
+

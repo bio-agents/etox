@@ -1,0 +1,39 @@
+{% extends '::frontend.html.twig' %}
+{% block title %}Listing Evidences {% endblock %}
+{% block article %}
+    {% set entityBackup = entityName %}
+    {% include 'FrontendBundle:Search_document:tags_code.html.twig' %}
+
+    <div id="evidences">
+        {% set entityName=entity %}
+        {% set entityTypeBackup= entityType %}
+        {% if entityTypeBackup=="CompoundDict" %}
+            {% set entityTypeBackup="Compound" %}
+        {% endif %}
+
+        {% if entityTypeBackup=="keyword" %}
+            {% set entityTypeBackup="" %}
+        {% endif %}
+
+        <h3>No {{ field | capitalize }} evidences found for
+        {% if entityType=="free-text" %}
+            {{entityTypeBackup}} search
+        {% else %}
+            {{entityTypeBackup}}s
+        {% endif %}
+            when searching for "{{ whatToSearch }}" "{{ entityName }}" </h3>
+        <div class="btmspc-dbl">
+            <small>
+                <em>
+                    Entity mentions are highlighted as follows:
+                    <mark class="compound">Compounds</mark>, <mark class="cyp">Cytochromes</mark>, <mark class="marker">Markers</mark>, <mark class="term">Terms</mark>, <mark class="specie">Species</mark>
+                </em>
+                . Curated evidences are indicated by:
+                <a class="curated" href="#"> </a>
+            </small>
+        </div>
+
+        <!-- here pagination block for Documents -->
+    </div>
+    {% include 'FrontendBundle:Search_document:scripts_code.html.twig' %}
+{% endblock %}

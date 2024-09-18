@@ -1,0 +1,132 @@
+{% extends '::frontend.html.twig' %}
+{% block title %}Compound List Summary {% endblock %}
+{% block article %}
+        <h1>Compounds list summary</h1>
+        <!-- Show compounds with: <a href="{{ path('compound_list_summaries',{'id':'drugBank'}) }}">DrugBank id</a>, <a href="{{ path('compound_list_summaries',{'id':'chebi'}) }}">ChEBI id</a>, <a href="{{ path('compound_list_summaries',{'id':'pubChemCompound'}) }}">PubChem compound</a><br/> -->
+        <div class="alphabet">
+                    <a class="first" href="{{ path('compound_list_summaries',{'id':id, 'initial':'a'}) }}">A</a>
+                    <a href="{{ path('compound_list_summaries',{'id':id, 'initial':'b'}) }}">B</a>
+                    <a href="{{ path('compound_list_summaries',{'id':id, 'initial':'c'}) }}" >C</a>
+                    <a href="{{ path('compound_list_summaries',{'id':id, 'initial':'d'}) }}" >D</a>
+                    <a href="{{ path('compound_list_summaries',{'id':id, 'initial':'e'}) }}" >E</a>
+                    <a href="{{ path('compound_list_summaries',{'id':id, 'initial':'f'}) }}" >F</a>
+                    <a href="{{ path('compound_list_summaries',{'id':id, 'initial':'g'}) }}" >G</a>
+                    <a href="{{ path('compound_list_summaries',{'id':id, 'initial':'h'}) }}" >H</a>
+                    <a href="{{ path('compound_list_summaries',{'id':id, 'initial':'i'}) }}" >I</a>
+                    <a href="{{ path('compound_list_summaries',{'id':id, 'initial':'j'}) }}" >J</a>
+                    <a href="{{ path('compound_list_summaries',{'id':id, 'initial':'k'}) }}" >K</a>
+                    <a href="{{ path('compound_list_summaries',{'id':id, 'initial':'l'}) }}" >L</a>
+                    <a href="{{ path('compound_list_summaries',{'id':id, 'initial':'m'}) }}" >M</a>
+                    <a href="{{ path('compound_list_summaries',{'id':id, 'initial':'n'}) }}" >N</a>
+                    <a href="{{ path('compound_list_summaries',{'id':id, 'initial':'o'}) }}" >O</a>
+                    <a href="{{ path('compound_list_summaries',{'id':id, 'initial':'p'}) }}" >P</a>
+                    <a href="{{ path('compound_list_summaries',{'id':id, 'initial':'q'}) }}" >Q</a>
+                    <a href="{{ path('compound_list_summaries',{'id':id, 'initial':'r'}) }}" >R</a>
+                    <a href="{{ path('compound_list_summaries',{'id':id, 'initial':'s'}) }}" >S</a>
+                    <a href="{{ path('compound_list_summaries',{'id':id, 'initial':'t'}) }}" >T</a>
+                    <a href="{{ path('compound_list_summaries',{'id':id, 'initial':'u'}) }}" >U</a>
+                    <a href="{{ path('compound_list_summaries',{'id':id, 'initial':'v'}) }}" >V</a>
+                    <a href="{{ path('compound_list_summaries',{'id':id, 'initial':'w'}) }}" >W</a>
+                    <a href="{{ path('compound_list_summaries',{'id':id, 'initial':'x'}) }}" >X</a>
+                    <a href="{{ path('compound_list_summaries',{'id':id, 'initial':'y'}) }}" >Y</a>
+                    <a href="{{ path('compound_list_summaries',{'id':id, 'initial':'z'}) }}" >Z</a>
+                    <a href="{{ path('compound_list_summaries',{'id':id, 'initial':'0'}) }}" >0-9</a>
+                    <a class="last" href="{{ path('compound_list_summaries',{'id':id, 'initial':'-'}) }}" /-/')">+-</a></div>
+
+        <div id="compounds">
+
+            <table id="compounds-table">
+                <thead>
+                    <tr>
+                        <th><a href="{{ path('compound_list_summaries',{'id': id, 'initial': initial, 'orderBy': 'drugbankname'}) }}">Compound Name</a></th>
+                        <th>Aliases</th>
+                        <th><a href="{{ path('compound_list_summaries',{'id': id, 'initial': initial, 'orderBy': 'drugbankid'}) }}">DrugBank id</a></th>
+                        <th><a href="{{ path('compound_list_summaries',{'id': id, 'initial': initial, 'orderBy': 'approval'}) }}">Approval</a></th>
+                        <th>Category</th>
+                        <th>Target Rel.</th>
+                        <th><a href="{{ path('compound_list_summaries',{'id': id, 'initial': initial, 'orderBy': 'term_counter'}) }}">Terms Rel.</a></th>
+                        <th><a href="{{ path('compound_list_summaries',{'id': id, 'initial': initial, 'orderBy': 'cyp_relations'}) }}">CYPs Rel.</a></th>
+                        <th><a href="{{ path('compound_list_summaries',{'id': id, 'initial': initial, 'orderBy': 'marker_relations'}) }}">Markers Rel..</a></th>
+                        <th><a href="{{ path('compound_list_summaries',{'id': id, 'initial': initial, 'orderBy': 'hepval_counter'}) }}">SVM</a></th>
+                        <th><a href="{{ path('compound_list_summaries',{'id': id, 'initial': initial, 'orderBy': 'svm_confidence_counter'}) }}">Conf.</a></th>
+                        <th><a href="{{ path('compound_list_summaries',{'id': id, 'initial': initial, 'orderBy': 'pattern_counter'}) }}">Pattern</a></th>
+                        <th><a href="{{ path('compound_list_summaries',{'id': id, 'initial': initial, 'orderBy': 'term_counter'}) }}">Term</a></th>
+                        <th><a href="{{ path('compound_list_summaries',{'id': id, 'initial': initial, 'orderBy': 'rule_counter'}) }}">Rule</a></th>
+                        <th><a href="{{ path('compound_list_summaries',{'id': id, 'initial': initial, 'orderBy': 'total_mentions'}) }}">Total Mentions</a></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for drugbank in drugBanks %}
+                    {% set drugbankid = drugbank['drugbankid'] %}
+                    {% set stringAliases = drugbank['alias'] %}
+                    <tr>
+                        <td>{{ drugbank['drugbankname'] }}</td>
+                        <td>
+                            <small>
+                                {{ stringAliases | replace({ ("|"): ", " }) }}
+                            </small>
+                        </td>
+                        <td>{{ drugbank['drugbankid'] }}</td>
+                        <td>
+                            {% set approval = drugbank["approval"] %}
+                            {{ approval | replace({("|"): ", "}) }}
+
+                        </td>
+                        <td>
+                            {% set category = drugbank["category"] %}
+                            {{ category | replace({("|"): ", "}) }}
+                        </td>
+                        <td>
+                            <small>
+                                {% set stringTarget=drugbank["target_relation"] %}
+                                {% set arrayTargets= stringTarget | split("|") %}
+                                {% for target in arrayTargets %}
+                                    {{ target }}<br>
+                                {% endfor %}
+                            </small>
+                        </td>
+                        <td>
+                            {{ drugbank["term_relations"] }}
+                        </td>
+                        <td>
+                            {{ drugbank["cyp_relations"] }}
+                        </td>
+                        <td>
+                            {{ drugbank["marker_relations"] }}
+                        </td>
+                        <td>
+                            {{ drugbank["hepval_counter"] }}
+                        </td>
+                        <td>
+                            {{ drugbank["svm_confidence_counter"] }}
+                        </td>
+                        <td>
+                            {{ drugbank["pattern_counter"] }}
+                        </td>
+                        <td>
+                            {{ drugbank["term_counter"] }}
+                        </td>
+                        <td>
+                            {{ drugbank["rule_counter"] }}
+                        </td>
+                        <td>
+                            {{ drugbank["total_mentions"] }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div class="pagination">
+                {{ simple_paginator_render(
+                    'compound_list_summaries', 'drugbanks',
+                        {
+                            'routeParams' : {'id' : id, 'initial' : initial},
+                            'container_class' : 'pagination'
+                        }
+                    )
+                }}
+            </div>
+        </div>
+
+    {% include 'FrontendBundle:Search_document:scripts_code.html.twig' %}
+{% endblock %}

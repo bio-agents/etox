@@ -1,0 +1,31 @@
+{% extends '::frontend.html.twig' %}
+
+{% block article %}
+    {% include 'FrontendBundle:Search_document:tags_code.html.twig' %}
+    <section class="row display" role="main">
+        <article class="twelve columns">
+            <h6>CompoundName-CAS information</h6>
+            <ul>
+                {% set counter=1 %}
+                <table>
+                    <tr>
+                        <th>Line #</th>
+                        <th>CAS registry number</th>
+                        <th>Compound Name</th>
+                    </tr>
+                {% for key,value in arrayCompoundsCas %}
+                    <tr>
+                        <td>{{counter}}</td>
+                        <td><a target="_blank" href="{{ path('search_interface_search_field_whatToSearch_entityType_source_entity',{'field':'hepatotoxicity', 'whatToSearch': 'id', 'entityType':'compoundDict', 'source': 'all', 'entityName':key}) }}">{{ key }}</a>
+                        </td>
+                        <td><a target="_blank" href="{{ path('search_interface_search_field_whatToSearch_entityType_source_entity',{'field':'hepatotoxicity', 'whatToSearch': 'compoundsTermsRelations', 'entityType':'compoundDict', 'source': 'all', 'entityName':value}) }}">{{ value }}</a>
+                        </td>
+                    </tr>
+                    {% set counter=counter+1 %}
+                {% endfor %}
+                </table>
+            </ul>
+        </article>
+    </section>
+                {% include 'FrontendBundle:Search_document:scripts_code.html.twig' %}
+{% endblock %}

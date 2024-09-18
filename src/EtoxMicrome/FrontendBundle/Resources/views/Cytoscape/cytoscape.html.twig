@@ -1,0 +1,103 @@
+{% extends '::frontend.html.twig' %}
+    {% block stylesheets %}
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
+        <script src="{{ asset('javascripts/jquery-ui-1.8.21.js') }}"></script>
+        <script src="{{ asset('javascripts/cytoscapeweb/js/src/AC_OETags.js') }}"></script>
+        <script src="{{ asset('javascripts/cytoscapeweb/js/src/cytoscapeweb.js') }}"></script>
+        <script src="{{ asset('javascripts/cytoscapeweb/cytoscape.js') }}"></script>
+        <script src="{{ asset('javascripts/cytoscapeweb/context_menu.js') }}"></script>
+        <link rel="stylesheet" href="{{ asset('javascripts/cytoscapeweb/cytoscape.css') }}">
+    {% endblock %}
+    {% block article %}
+        <div class="clear-both"></div>
+          <div class='cytoscape_agent' id='rand197'>
+            <div class='window' id='rand197_window'></div>
+            <script>
+                var cytoscape_id = '#rand197';
+
+                var agent = $(cytoscape_id).cytoscape_agent({
+                  knowledge_base: 'user',
+                  namespace: 'Hsa/feb2014',
+                  swfPath: '{{ asset('javascripts/cytoscapeweb/swf/CytoscapeWeb') }}',
+                  entities: {},
+                  nodeAgenttipsEnabled: true,
+                    edgeAgenttipsEnabled: true,
+                    edgesMerged: false,
+                  aesthetics: {
+                    "nodes":{
+                        "shape":[
+                            {"type":"mapper","feature":"entity_type","map":{"CompoundDict":"CIRCLE","Term":"HEXAGON", "Cytochrome":"SQUARE", "Marker":"TRIANGLE"}}
+                        ],
+                        "borderColor":[
+                            {"type":"mapper","feature":"entity_type","map":{"Sample":"#D33682","Gene":"#B58900"}}
+                        ]
+                    },
+                    "edges":{
+
+                    }
+                  },
+
+                  node_click: function(evt){
+                    var target = evt.target;
+                    var label = target.data.label;
+                    var entity_type = target.data.entity_type;
+                    //if((entity_type=="CompoundDict") || (entity_type=="Cytochrome")){
+                    if(entity_type=="CompoundDict"){
+                        var url = '{{ path('cytoscape', {'entityType': 'xxx', 'entityName': 'yyy'}) }}';
+                        url = url.replace('xxx',entity_type);
+                        url = url.replace('yyy',label);
+                        window.location = url;
+                    }
+                  },
+
+                  edge_click: function(evt){
+                    var edge = evt.target;
+                    var relations= edge.data.typeOfRelations;
+                    var stringAlert="Weight: " + edge.data.weight ;
+                    if ( relations != null ){
+                        stringAlert=stringAlert + "\nType of Relations: " + "\n\t" + edge.data.typeOfRelations;
+                    }
+                    alert(stringAlert);
+                  },
+
+                  network: {
+                    "dataSchema":
+                        {"nodes":[
+                            {"name":"entity_type","type":"string"},
+                            {"name":"label","type":"string"},
+                            {"name":"url","type":"string"},
+                            {"name":"opacity","type":"number"},
+                            {"name":"borderWidth","type":"number"},
+                            {"name":"borderColor","type":"string"},
+                            {"name":"size","type":"number"},
+                            {"name":"selected","type":"boolean","defValue":false},
+                            {"name":"color","type":"string"},
+                            {"name":"shape","type":"string"},
+                            {"name":"info","type":"object"}
+                        ],
+                        "edges":[
+                            {"name":"database","type":"string"},
+                            {"name":"info","type":"object"},
+                            {"name":"opacity","type":"number"},
+                            {"name":"color","type":"string"},
+                            {"name":"width","type":"number"},
+                            {"name":"weight","type":"number"},
+                            {"name":"typeOfRelations","type":"string"},
+                            {"name":"agenttipText","type":"string"}
+                        ]},
+                    "data":{
+                         "nodes":[
+                            {{ stringNodes | raw }}
+                         ],"edges":[
+                            {{ stringEdges | raw }}
+                        ]
+                    }
+                  },
+                });
+
+                agent.cytoscape_agent('draw');
+            </script>
+          </div>
+        <div class="clear-both"></div>
+    {% endblock %}
+

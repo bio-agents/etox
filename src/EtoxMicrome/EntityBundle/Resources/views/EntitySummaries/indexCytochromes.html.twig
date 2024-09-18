@@ -1,0 +1,78 @@
+{% extends '::frontend.html.twig' %}
+{% block title %}Compound List Summary {% endblock %}
+{% block article %}
+    <div class="wrapper">
+        <h1>Cytochrome list summary</h1>
+        <div class="alphabet">
+            Total number of CYPs: {{ total_number_of_cytochromes }}<br/>
+            <a class="first" href="{{ path('cytochrome_list_summaries',{'initial':'a', 'specie': specie}) }}" >A</a>
+            <a href="#" class="open-c">C</a>
+            <a href="{{ path('cytochrome_list_summaries',{'initial':'d', 'specie': specie}) }}" class="close-cp">D</a>
+            <a href="{{ path('cytochrome_list_summaries',{'initial':'e', 'specie': specie}) }}" class="close-cp">E</a>
+            <a href="{{ path('cytochrome_list_summaries',{'initial':'f', 'specie': specie}) }}" class="close-cp">F</a>
+            <a href="{{ path('cytochrome_list_summaries',{'initial':'h', 'specie': specie}) }}" class="close-cp">H</a>
+            <a href="{{ path('cytochrome_list_summaries',{'initial':'l', 'specie': specie}) }}" class="close-cp">L</a>
+            <a href="{{ path('cytochrome_list_summaries',{'initial':'m', 'specie': specie}) }}" class="close-cp">M</a>
+            <a href="{{ path('cytochrome_list_summaries',{'initial':'n', 'specie': specie}) }}" class="close-cp">N</a>
+            <a href="{{ path('cytochrome_list_summaries',{'initial':'o', 'specie': specie}) }}" class="close-cp">O</a>
+            <a href="{{ path('cytochrome_list_summaries',{'initial':'p', 'specie': specie}) }}" class="close-cp">P</a>
+            <a href="{{ path('cytochrome_list_summaries',{'initial':'r', 'specie': specie}) }}" class="close-cp">R</a>
+            <a href="{{ path('cytochrome_list_summaries',{'initial':'s', 'specie': specie}) }}" class="close-cp">S</a>
+            <a href="{{ path('cytochrome_list_summaries',{'initial':'t', 'specie': specie}) }}" class="close-cp">T</a>
+            <a href="{{ path('cytochrome_list_summaries',{'initial':'v', 'specie': specie}) }}" class="close-cp">V</a>
+            <a href="{{ path('cytochrome_list_summaries',{'initial':'0', 'specie': specie}) }}" class="close-cp last">0-9</a>
+        </div>
+        <div id="cytochrome-c" class="alphabet">
+        {% if "cyp" in initial %}
+            <script>
+                $("#cytochrome-c").css("display", "block");
+            </script>
+        {% endif %}
+            Select one...<br/>
+            <a href="{{ path('cytochrome_list_summaries',{'initial':'cyp1', 'specie': specie}) }}" class="cyp first">CYP1</a>
+            <a href="{{ path('cytochrome_list_summaries',{'initial':'cyp2', 'specie': specie}) }}" class="cyp">CYP2</a>
+            <a href="{{ path('cytochrome_list_summaries',{'initial':'cyp3', 'specie': specie}) }}" class="cyp">CYP3</a>
+            <a href="{{ path('cytochrome_list_summaries',{'initial':'cyp4', 'specie': specie}) }}" class="cyp">CYP4</a>
+            <a href="{{ path('cytochrome_list_summaries',{'initial':'cyp5', 'specie': specie}) }}" class="cyp">CYP5</a>
+            <a href="{{ path('cytochrome_list_summaries',{'initial':'cyp6', 'specie': specie}) }}" class="cyp">CYP6</a>
+            <a href="{{ path('cytochrome_list_summaries',{'initial':'cyp7', 'specie': specie}) }}" class="cyp">CYP7</a>
+            <a href="{{ path('cytochrome_list_summaries',{'initial':'cyp8', 'specie': specie}) }}" class="cyp">CYP8</a>
+            <a href="{{ path('cytochrome_list_summaries',{'initial':'cyp9', 'specie': specie}) }}" class="cyp last">CYP9</a>
+        </div>
+        Total number of CYPs starting by '{{ initial }}/{{ initial | upper }}': {{ numberOfCytochromes }}
+        <div id="compounds">
+            <table id="compounds-table">
+                <thead>
+                    <tr>
+                        <th>Cytochrome Name</th>
+                        <th>Canonical Name</th>
+                        <th>Uniprot id</th>
+                        <th>Tax id</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cytochrome in arrayCytochromes %}
+                    <tr>
+                        <td>{{ cytochrome.getName }}</td>
+                        <td>{{ cytochrome.getCanonical }}</td>
+                        <td>{{ cytochrome.getEntityId }}</td>
+                        <td>{{ cytochrome.getTax }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="pagination">
+            {{ simple_paginator_render(
+                'cytochrome_list_summaries', 'cytochromes',
+                    {
+                        'routeParams' : {'initial' : initial, 'specie' : specie},
+                        'container_class' : 'pagination'
+                    }
+                )
+            }}
+        </div>
+    </div>
+
+    {% include 'FrontendBundle:Search_document:scripts_code.html.twig' %}
+{% endblock %}

@@ -1,0 +1,113 @@
+{% extends '::base.html.twig' %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+
+{% endblock %}
+
+{% block body %}
+        <div class="sk-folding-cube">
+          <div class="sk-cube1 sk-cube"></div>
+          <div class="sk-cube2 sk-cube"></div>
+          <div class="sk-cube4 sk-cube"></div>
+          <div class="sk-cube3 sk-cube"></div>
+        </div>
+        <header id="top">
+            <h1 id="applogo">
+                <a rel="home" href="{{ path('homepage') }}">
+                    <img src="{{ asset('images/limtox_logo.png') }}" border="0" />
+                    Lim<span style="color:#1b3d65">Tox</span>
+                </a>
+
+            </h1>
+            <nav id="access" role="navigation">
+                <ul>
+                    <li><a href="{{ path('homepage') }}">Home</a></li>
+                    {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                        <li><a href="{{ path('homepage') }}">User Area</a></li>
+                    {% endif %}
+                    <li><a href="https://docs.google.com/forms/d/1a7iej8rV8Hat1EtOtPZlaku4HeqoDLE9gg4vRpOPIXk/viewform" target="_blank">Feedback</a></li>
+                    <li><a href="mailto:acanada@cnio.es">Contact</a></li>
+                    <li>
+                        <a href="https://github.com/inab/etox/tree/master/lexicon">
+                            LimTox Resources
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ path('how-to-cite') }}">
+                            How to cite
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ path('news') }}">
+                            News
+                        </a>
+                    </li>
+                    <li>
+                        {% set titleHelp = "Tutorial/Documentation" %}
+                        <span data-agenttip class="has-tip" title="{{ titleHelp }}" style="border-bottom:none">
+                            <a href="{{ path('help') }}" style="font-weight:initial">Help</a>
+                        </span>
+                    </li>
+                </ul>
+            </nav>
+            <div class="clear-both"></div>
+            {# <div id="user-box">
+                {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                    {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }} |
+                    <a href="{{ path('fos_user_security_logout') }}">
+                        {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
+                    </a>
+                {% else %}
+                    <a href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a>&nbsp;|&nbsp;
+                    <a href="{{ path('fos_user_registration_register') }}">Register</a>
+                {% endif %}
+            </div>
+            #}
+        </header>
+        <section class="content" role="main">
+            {% block article %}{% endblock %}
+        </section>
+        <footer id="bottom" role="contentinfo">
+            <nav>
+				<ul>
+					<li>
+					   &copy; {{ 'now'|date('Y') }} - Spanish National Cancer Research Centre. CNIO Structural Biology and BioComputing Programme - <a href="{{ path('download_curated_termrelations') }}">LimTox DB</a><br/>
+
+					</li>
+					<li>
+					   <a target="_blank" href="http://openminted.eu/"><img src="{{ asset('images/omtd_logo_grey.png') }}" class="rollover" border="0" style="width:256px"/></a>
+				    </li>
+				    <li>
+					   <a target="_blank" href="http://www.agendadigital.gob.es/tecnologias-lenguaje/Paginas/plan-impulso-tecnologias-lenguaje.aspx"><img src="{{ asset('images/PlanTL_logo_grey.png') }}" class="rollover" border="0" style="width:128px" /></a>
+				    </li>
+					<li>
+    					<a target="_blank" href="http://www.etoxproject.eu/"><img src="{{ asset('images/etox-off.png') }}" class="rollover" border="0" /></a>
+					</li>
+					<li>
+    					<a target="_blank" href="http://www.cnio.es"><img src="{{ asset('images/cnio-off.png') }}" class="rollover" border="0" /></a>
+					</li>
+					<li>
+					   <a target="_blank" href="http://www.inab.org"><img src="{{ asset('images/inb-off.png') }}" class="rollover" border="0" /></a>
+				    </li>
+
+				</ul>
+			</nav>
+			<div class="modal"><!-- Place at bottom of page --></div>
+        </footer>
+        {% block javascripts_footer %}
+        {% endblock %}
+        <script>
+            function goToPage()
+             {
+                var e = document.getElementById("searchby");
+                var url = e.options[e.selectedIndex].value;
+                if (url != "")
+                {
+                    window.open(url,'_self');
+                }
+             }
+        </script>
+{% endblock %}

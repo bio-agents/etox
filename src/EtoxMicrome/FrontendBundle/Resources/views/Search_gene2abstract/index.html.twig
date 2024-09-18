@@ -1,0 +1,168 @@
+{% extends '::frontend.html.twig' %}
+{% block title %}Listing Evidences {% endblock %}
+{% block article %}
+    {% include 'FrontendBundle:Search_document:tags_code.html.twig' %}
+    <div id="evidences">
+        {# <a href="{{ path('export_abstracts',{'field':field, 'whatToSearch': whatToSearch, 'entityType': entityType, 'entityName': entityName, 'download': true}) }}">(Generate a file with results)</a> #}
+        {% set agenttipCounter=1 %}
+        {% set stringStickyAgenttip = "" %}
+        {% set foundFor=entityType %}
+        {% if foundFor=="CompoundDict" %}
+            {% set foundFor="Compound" %}
+        {% endif %}
+
+        <div id="documentsResults">
+            <a name="documents"></a>
+                <h3>Ranked sentences in Abstracts for {{source}}: {{ entityBackup }}</h3>
+                    <table>
+                        <tr>
+                            <td colspan="5">
+                                <strong><a href="#" class="toggleGeneAliases">Click to see aliases for {{ entityBackup }}: </a></strong>
+                                <div id="geneAliases">
+                                    {% for alias in arrayAliases %}
+                                        {{ alias }},&nbsp;
+                                    {% endfor %}
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="5">
+                                <a href="{{ path('search_interface_search_genes_orderby', {'whatToSearch': whatToSearch, 'source': source, 'entityName': entityName, 'orderBy': orderBy})}}?download=csv" class="start-preload"><strong>Download results</strong></a>
+                                {# Uncomment this to enable multiple download formats. Just add new block for new formats
+                                    <span data-agenttip="stickyDownload">
+                                        <a href="#"><strong>Download results</strong></a>
+                                    </span>
+                                    {%
+                                    set agenttip =  "
+                                        <div id='stickyDownload' class='atip'>
+                                            <ul class='download-list'>
+                                                <li><a  href="~path('search_interface_search_genes_orderby', {'whatToSearch': whatToSearch, 'source': source, 'entityName': entityName, 'orderBy': orderBy }) ~'?download=csv'~">
+                                                        <img src="~ asset('images/icons/csv.png')~" border='0' />
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>"
+                                    %}
+                                    {% set stringStickyAgenttip = stringStickyAgenttip ~ agenttip  %}
+                                #}
+
+                            </td>
+                        </tr>
+                    </table>
+            <div class="btmspc-dbl">
+                <div data-alert class="alert-box info radius">
+                    Entity mentions <strong>ARE NOT highlighted</strong> when searching <strong>inside Abstracts</strong>
+                          <a href="#" class="close">&times;</a>
+                </div>
+            </div>
+            <small>
+                <em>
+                    <span class="left">Color key for scores:&nbsp;&nbsp; </span>{% include 'FrontendBundle:Search_document:score_color_coding.html.twig' %}
+                </em>
+            </small>
+            <table id="tableResults" class="tablesorter">
+                <thead>
+                    <th>Source</th>
+                    <th><a href="{{ path('search_interface_search_genes_orderby',{'whatToSearch':whatToSearch, 'source': source, 'entityName': entityName, 'orderBy': 'score'}) }}">Score</a></th>
+
+                    <th><a href="{{ path('search_interface_search_genes_orderby',{'whatToSearch':whatToSearch, 'source': source, 'entityName': entityName, 'orderBy': 'patternCount'}) }}">Pattern</a></th>
+
+                    <th> <a href="{{ path('search_interface_search_genes_orderby',{'whatToSearch':whatToSearch, 'source': source, 'entityName': entityName, 'orderBy': 'svmConfidence'}) }}">SVM Confidence</a></th>
+
+                    <th><a href="{{ path('search_interface_search_genes_orderby',{'whatToSearch':whatToSearch, 'source': source, 'entityName': entityName, 'orderBy': 'toxicology'}) }}">Toxicology</a></th>
+
+                    <th><a href="{{ path('search_interface_search_genes_orderby',{'whatToSearch':whatToSearch, 'source': source, 'entityName': entityName, 'orderBy': 'biomarker'}) }}">Biomarker</a></th>
+                    <th>Sentence</th>
+                </thead>
+                <tbody>
+                    {% set contador = 1 %}
+                    {% for abstract in arrayPaginatedAbstracts %}
+                        <tr class="document {{ cycle(['odd', 'even'], contador) }}">
+                            {% set contador = contador + 1 %}
+                            {# {% set kind = entity2Document.document.getKind %} #}
+                            {% set score = abstract.getHepval %}
+                            {% set score = score|number_format(2) %}
+                            {% set score = score|colorCodingScore %}
+                            {% set pattern = abstract.getPatternCount %}
+                            {% set pattern = pattern|number_format(2) %}
+                            {% set pattern = pattern|colorCodingScore %}
+                            {% set svmConfidence = abstract.getSvmConfidence %}
+                            {% set svmConfidence = svmConfidence|number_format(2) %}
+                            {% set svmConfidence = svmConfidence|colorCodingScore %}
+                            {% set toxicology = abstract.getToxicology %}
+                            {% set toxicology = toxicology|number_format(2) %}
+                            {% set toxicology = toxicology|colorCodingScore %}
+                            {% set biomarker = abstract.getBiomarker %}
+                            {% set biomarker = biomarker|number_format(2) %}
+                            {% set biomarker = biomarker|colorCodingScore %}
+                            <td>
+                            {# {% if kind == "pubmed" %} #}
+
+                            {% set pmid=abstract.getPmid %}
+                            {% set link="http://www.ncbi.nlm.nih.gov/pubmed/" ~ pmid %}
+                            {% set imageRoute = 'images/pubmed.png' %}
+                            {# {% set sid=entity2Document.document.getSentenceId %} #}
+                            <span data-agenttip='sticky{{ agenttipCounter }}'>
+                                    <a href="{{ link }}" target="_blank"><img src="{{ asset(imageRoute) }}" class="outlinkLogo"/></a>
+                                </span>
+                            {% set agenttip =  "<div id='sticky"~agenttipCounter~"' class='atip' >Pubmed link: <a href='"~link ~"'>"~link~"</a><br>Pubmed Id: "~ pmid ~"<br/></div>" %}
+                            {% set agenttipCounter = agenttipCounter + 1 %}
+                            {% set stringStickyAgenttip = stringStickyAgenttip ~ agenttip  %}
+
+                            {# {% endif %} #}
+                            </td>
+                            <td class="center">
+                                {{ score |raw }}
+                            </td>
+                            <td class="center">
+                                {{ pattern |raw }}
+                            </td>
+                            <td class="center">
+                                {{ svmConfidence | raw }}
+                            </td>
+                            <td class="center">
+                                {{ toxicology |raw }}
+                            </td>
+                            <td class="center">
+                                {{ biomarker|raw }}
+                            </td>
+                                {% set text=abstract.getText %}
+                                {#
+                                    {% set arrayText= text | highlightGenesAbstracts (abstract,entityBackup,"hepatotoxicity",whatToSearch, source, "gene", agenttipCounter, orderBy) %}
+                                    {% set text = arrayText[0] | raw %}
+                                    {% set stringStickyAgenttip = stringStickyAgenttip ~ arrayText[1] %}
+                                    {% set agenttipCounter = arrayText[2] %}
+                                #}
+                            <td>
+                                {{ text | raw }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <!-- here pagination block for Abstracts -->
+               <div class="pagination">
+                    {{ simple_paginator_render(
+                        'search_interface_search_genes_orderby', 'abstracts',
+                            {
+                                'routeParams' : {'whatToSearch' : whatToSearch, 'source' : source,  'entityName' : entityName, 'orderBy': orderBy},
+                                'container_class' : 'pagination'
+                            }
+                        )
+                    }}
+                </div>
+
+
+
+        </div>
+        {# Here we rebuild the stringStickyAgenttip inside its container divs #}
+        <div id="mystickyagenttip" class="stickyagenttip">
+            <div style="padding:5px">
+                {{ stringStickyAgenttip | raw }}
+            </div>
+            <div class="stickystatus"></div>
+        </div>
+
+    {% include 'FrontendBundle:Search_document:scripts_code.html.twig' %}
+{% endblock %}
