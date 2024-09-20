@@ -1,15 +1,3 @@
-{
-  "name": "resources",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "uglify-js": "^2.7.4",
-    "uglifycss": "0.0.25"
-  }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:d857a5bb723c7357f51612c09ad9f235db534bb91deef6c10d69b830fb686321
+size 286
